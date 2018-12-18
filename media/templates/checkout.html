@@ -1,0 +1,148 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %}{{ block.super }} تسویه حساب {% endblock %}
+{% block body %}
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li><a href={% url 'index' %}><i class="fa fa-home"></i></a></li>
+            <li><a href={% url 'cart' %}>سبد خرید</a></li>
+            <li><a href={% url 'checkout' %}>تسویه حساب</a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <div class="row">
+            <!--Middle Part Start-->
+            {% comment %} <form method = 'POST'>
+            {% csrf_token %}
+            <div id="content" class="col-sm-12">
+                <h1 class="title">تسویه حساب</h1>
+                <div class="row">
+                    {% if not_authenticated %}
+                    <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><i class="fa fa-user"></i> اطلاعات شخصی شما</h4>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="account">
+                            <div class="form-group required">
+                                <label for="input-payment-firstname" class="control-label">نام</label>
+                                <input type="text" class="form-control" id="input-payment-firstname" placeholder="نام" value="" name="firstname">
+                            </div>
+                            <div class="form-group required">
+                                <label for="input-payment-lastname" class="control-label">نام خانوادگی</label>
+                                <input type="text" class="form-control" id="input-payment-lastname" placeholder="نام خانوادگی" value="" name="lastname">
+                            </div>
+                            <div class="form-group required">
+                                <label for="input-payment-email" class="control-label">آدرس ایمیل</label>
+                                <input type="text" class="form-control" id="input-payment-email" placeholder="آدرس ایمیل" value="" name="email">
+                            </div>
+                            <div class="form-group required">
+                                <label for="input-payment-telephone" class="control-label">شماره تلفن</label>
+                                <input type="text" class="form-control" id="input-payment-telephone" placeholder="شماره تلفن" value="" name="telephone">
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div> {% endcomment %}
+        <div class="col-sm-12">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> سبد خرید</h4>
+                  </div>
+                    <div class="panel-body">
+                      <div class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <td class="text-center">تصویر</td>
+                              <td class="text-left">نام محصول</td>
+                              <td class="text-left">تعداد</td>
+                              <td class="text-right">قیمت واحد</td>
+                              <td class="text-left">تخفیف</td>
+                              <td class="text-left">کوپن</td>
+                              <td class="text-right">کل</td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for i in carts %}
+                            <tr>
+                              <td class="text-center"><a href={% url 'KalaDetailView' i.product.slug %}><img style="width: 50px; height: 70px;" src={{ i.product.pic0.url }} alt={{ i.product.name }} title={{ i.product.name }} class="img-thumbnail"></a></td>
+                              <td class="text-left"><a href={% url 'KalaDetailView' i.product.slug %}>{{ i.product.name }}</a></td>
+                              <td class="text-left">{{ i.count }}</td>
+                              <td class="text-right">{{ i.saler.price }}</td>
+                              <td class="text-left">{% if i.saler.off %}{{ i.saler.off }}{% else %} ندارد {% endif %}</td>
+                              <td class="text-left">{% if i.coupon %}{{ i.coupon.off }}%{% else %} ندارد {% endif %}</td>
+                              <td class="text-right">{{ i.finallyPrice }}</td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <td class="text-right" colspan="4"><strong>جمع کل:</strong></td>
+                              <td class="text-right">{{ totalPrice }} تومان</td>
+                            </tr>
+                            <tr>
+                              <td class="text-right" colspan="4"><strong>هزینه ارسال ثابت :</strong></td>
+                              <td class="text-right">{{ sendCost }} تومان</td>
+                            </tr>
+                            <tr>
+                              <td class="text-right" colspan="4"><strong>کسر هدیه:</strong></td>
+                              <td class="text-right">{{ gift }} تومان</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="4"><strong>کسر کوپن</strong></td>
+                                <td class="text-right">{{ coupon }} تومان</td>
+                            </tr>
+                            <tr>
+                              <td class="text-right" colspan="4"><strong>مالیات:</strong></td>
+                              <td class="text-right">{{ tax }} تومان</td>
+                            </tr>
+                            <tr>
+                              <td class="text-right" colspan="4"><strong>کل :</strong></td>
+                              <td class="text-right">{{ toPay }} تومان</td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-sm-12"><div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><i class="fa fa-book"></i> آدرس</h4>
+                    </div>
+                    <div class="panel-body">
+                        <fieldset id="address" class="required">
+                            <form method = 'POST'>
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <div class="form-group required">
+                                <label for="input-payment-lastname" class="control-label">{{ field.label_tag }}</label>
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                            <label class="control-label" for="confirm_agree">
+                            <input type="checkbox" required="" class="validate required" id="confirm_agree" name="confirm agree" onchange="document.getElementById('button-confirm').disabled = !this.checked;">
+                            <span><a class="agree" href={% url 'rules' %}><b>شرایط و قوانین</b></a> را خوانده ام و با آنها موافق هستم.</span> </label>
+                            <input type="submit" name="GoToPay" class="btn btn-success" id="button-confirm" value="تایید سفارش" disabled/>
+                            </form>
+                            <div class="pull-left">
+                              <a href={% url 'cart' %} class="btn btn-default">ایجاد تغییرات</a>
+                              <a href={% url 'index' %} class="btn btn-primary">ادامه خرید</a>
+                            </div>
+                        </fieldset>
+                    </div>
+                  </div>   
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

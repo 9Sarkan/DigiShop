@@ -1,0 +1,46 @@
+{% extends 'shared/main.html'%}
+{% load static %}
+{% block title %} {{ block.super }} ثبت نام {% endblock %}
+{% block body %}
+<div id="container">
+    <div class="container">
+      <!-- Breadcrumb Start-->
+      <ul class="breadcrumb">
+        <li><a href={% url 'index' %}><i class="fa fa-home"></i></a></li>
+        <li><a href={% url 'register' %}>ثبت نام حساب کاربری</a></li>
+      </ul>
+      <!-- Breadcrumb End-->
+      <div class="row">
+        <!--Middle Part Start-->
+        <div class="col-sm-9" id="content">
+          <h1 class="title">ثبت نام حساب کاربری</h1>
+          <p>اگر قبلا حساب کاربریتان را ایجاد کرد اید جهت ورود به <a href={% url 'login' %}>صفحه لاگین</a> مراجعه کنید.</p>
+          <form class="form-horizontal" method= 'POST'>
+            {% csrf_token %}
+            <fieldset id="account">
+              <legend>اطلاعات شخصی شما</legend>
+              {% for field in form %}
+              <div class="form-group required">
+                <label for="input-firstname" class="col-sm-2 control-label">{{ field.label_tag }}</label>
+                <div class="col-sm-10">
+                  {{ field }}
+                </div>
+              </div>
+              {% for error in field.errors %}
+                <p style="color : red;">{{ error }}</p>
+              {% endfor %}
+              {% endfor %}
+            </fieldset>
+            <div class="buttons">
+              <div class="pull-right">
+                <input type="checkbox" value="1" name="agree" onchange="document.getElementById('registerButton').disabled = !this.checked;">
+                &nbsp;من <a class="agree" href={% url 'private' %}><b>سیاست حریم خصوصی</b> را خوانده ام و با آن موافق هستم</a> &nbsp;
+                <br/>
+                <input type="submit" id="registerButton" class="btn btn-success" value="ادامه" disabled>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

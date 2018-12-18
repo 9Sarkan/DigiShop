@@ -1,0 +1,210 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %}{{ block.super }} {{ cate.name }} دسته بندی {% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap-rtl.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/font-awesome/css/font-awesome.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.carousel.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.transitions.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-skin2.css" %} />
+{% endblock %}
+{% block body %}
+<div id="container">
+<div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+    <li><a href={% url 'index' %}><i class="fa fa-home"></i></a></li>
+    {% if cate %}
+    <li><a href={% url 'CategoryListView' cate.slug %}>{{ cate.name }}</a></li>
+    {% else %}
+    <li><a href={% url 'BrandListView' brand.slug %}>{{ brand.name }}</a></li>
+    {% endif %}
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+    <!--Left Part Start -->
+    <aside id="column-left" class="col-sm-3 hidden-xs">
+        <h3 class="subtitle">دسته ها</h3>
+        <div class="box-category">
+            {% if cate %}
+            <ul id="cat_accordion">
+                <li> <a href={% url 'CategoryListView' "for-man" %} {% if cate.gen == 'm' %} class="active" {% endif %}>آقایان</a> <span class="down"> </span>
+                    <ul>
+                        <li><a href={% url 'CategoryListView' "clothes-m" %}>لباس</a></li>
+                        <li><a href={% url 'CategoryListView' "bag-m" %}>کیف</a></li>
+                        <li><a href={% url 'CategoryListView' "shoes-m" %}>کفش</a></li>
+                        <li><a href={% url 'CategoryListView' "watch-m" %}>ساعت</a></li>
+                        <li><a href={% url 'CategoryListView' "parfum-m" %}>ادکلن، عطر و اسپری</a></li>
+                    </ul>
+                </li>
+                <li><a <a href={% url 'CategoryListView' "for-women" %} {% if cate.gen == 'f' %} class="active" {% endif %}>بانوان</a> <span class="down"></span>
+                    <ul>
+                        <li><a href={% url 'CategoryListView' "clothes-f" %}>لباس</a></li>
+                        <li><a href={% url 'CategoryListView' "bag-f" %}>کیف</a></li>
+                        <li><a href={% url 'CategoryListView' "shoes-f" %}>کفش</a></li>
+                        <li><a href={% url 'CategoryListView' "watch-f" %}>ساعت</a></li>
+                        <li><a href={% url 'CategoryListView' "parfum-f" %}>ادکلن، عطر و اسپری</a></li>
+                    </ul>
+                </li>
+                <li><a href={% url 'CategoryListView' "special-for-sports" %} {% if cate.gen == 's' %} class="active" {% endif %}>لوازم ورزشی</a> <span class="down"></span>
+                    <ul>
+                        <li><a href={% url 'CategoryListView' "with-ball" %}>ورزش های توپی</a></li>
+                        <li><a href={% url 'CategoryListView' "water-sports" %}>ورزش های آبی</a></li>
+                        <li><a href={% url 'CategoryListView' "bady-building" %}>ورزش های بدنسازی</a></li>
+                        <li><a href={% url 'CategoryListView' "sport-team-clothes" %}>لباس تیم های ورزشی</a></li>
+                        <li><a href={% url 'CategoryListView' "bicycle-sports" %}>دوچرخه سواری</a></li>
+                    </ul>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+        <h3 class="subtitle">برندها</h3>
+        <div class="side-item">
+            <div class="box-category">
+                <ul id="brand_accordion">
+                    {% for b in brands %}
+                    <li><a href={% if cate %}{% url 'BrandCategory' cate.slug b.slug %}{% else %}{% url 'BrandListView' b.slug %}{% endif %}>{{ b.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <h3 class="subtitle">بازه قیمتی</h3>
+        <div class="side-item">
+            <div class="box-category">
+                <div data-role="main" class="ui-content">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <label>{{ field.label_tag }}</label>&nbsp;&nbsp;{{ field }}<br/>
+                        {% endfor %}
+                        &nbsp;&nbsp;<input type="submit" class="btn btn-success" value = "اعمال" />
+                    </form>
+                </div>
+            </div> 
+        </div>
+        <h3 class="subtitle">وضعیت موجودی</h3>
+        <div class="side-item">
+            <div class="box-category">
+                <ul>
+                    <li><a id = 'Justinstock'>فقط موجود ها</a></li>
+                    <li><a id = 'NeverMind'>همه</a></li>
+                </ul>
+                <script>
+                    var address = window.location.href;
+                    if (address.slice(-8) != "instock/"){
+                    document.getElementById('Justinstock').href = window.location.href + "instock";
+                    }
+                    else{
+                        document.getElementById('NeverMind').href = address.slice(0,-8);
+                    }
+                </script>
+            </div>
+        </div>
+        <h3 class="subtitle">شگفت انگیزها</h3>
+        <div class="side-item">
+            {% for j in OffKala %}
+            <div class="product-thumb clearfix">
+                <div class="image"><a href={% url 'KalaDetailView' j.kala.slug %}><img src={{ j.kala.pic0.url }} alt={{ j.kala.name }} title={{ j.kala.name }} class="img-responsive" /></a></div>
+                <div class="caption">
+                    <h4><a href={% url 'KalaDetailView' j.kala.slug %}>{{ j.kala.name }}</a></h4>
+                    <p class="price"><span class="price-new">{{ j.NewPrice }}</span> <span class="price-old">{{ j.price }}</span> <span class="saving">-{{ j.off }}%</span></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <h3 class="subtitle">پرفروش ها</h3>
+
+        <div class="side-item">
+            {% for j in mostsalled %}
+            <div class="product-thumb clearfix">
+                <div class="image"><a href={% url 'KalaDetailView' j.product.slug %}><img src={{ j.product.pic0.url }} alt={{ j.product.name }} title={{ j.product.name }} class="img-responsive" /></a></div>
+                <div class="caption">
+                    <h4><a href={% url 'KalaDetailView' j.product.slug %}>{{ j.product.name }}</a></h4>
+                    <p class="price"><span class="price-new">{{ j.saler.NewPrice }}</span> <span class="price-old">{{ j.saler.price }}</span> <span class="saving">-{{ j.saler.off }}%</span></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="banner owl-carousel">
+            <div class="item"> <a href="#"><img src={% static "image/banner/small-banner1-265x350.jpg" %}  alt="small banner" class="img-responsive" /></a> </div>
+            <div class="item"> <a href="#"><img src={% static "image/banner/small-banner-265x350.jpg" %} alt="small banner1" class="img-responsive" /></a> </div>
+        </div>
+    </aside>
+    <!-- Left Part End -->
+    <!-- Middle Part Start -->
+    <div id="content" class="col-sm-9">
+        <h1 class="title">{{ cate.cat.name }}</h1>
+        <div class="product-filter">
+            <div class="row">
+                <div class="col-md-4 col-sm-5">
+                    <div class="btn-group">
+                        <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="List"><i class="fa fa-th-list"></i></button>
+                        <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="Grid"><i class="fa fa-th"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row products-category">
+        {% for i in kalas %}
+            <div class="product-layout product-list col-xs-12">
+                <div class="product-thumb">
+                    <div class="image"><a href={% url 'KalaDetailView' i.slug %}><img src={{ i.pic0.url }} alt={{ i.name }} title={{ i.name }} class="img-responsive" height=330 width=220/></a>
+                    </div>
+                    <div>
+                        <div class="caption">
+                            <h4><a href={% url 'KalaDetailView' i.slug %}> {{ i.name }} </a></h4>
+                            <p class="description">{{ i.mindesc }}</p>
+                            {% for j in i.kalainst.all %}
+                            <p class="price"> {% if j.off != 0 %} <span class="price-new">{{ j.NewPrice }}</span> <span class="price-old">{{ j.price }}</span> <span class="saving">-{{ j.off }}%</span>{% else %} <span class="price-new">{{ j.price }}</span> {% endif %}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="button-group">
+                            <a href={% url 'KalaDetailView' i.slug %} ><button class="btn-primary" type="button"><span>خرید</span></button></a>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6 text-left">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                        <li><a href="{{ request.path }}?page=1">&lt;|</a></li>
+                    {% endif %}
+                    <li class="active"><span>{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}">&gt;</a></li>
+                        <li><a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">&gt;|</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-sm-6 text-right">
+            صفحه ی {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}
+            </div>
+        </div>
+    </div>
+    <!-- Middle Part End -->
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src={% static "js/jquery-2.1.1.min.js" %}></script>
+<script type="text/javascript" src={% static "js/bootstrap/js/bootstrap.min.js" %}></script>
+<script type="text/javascript" src={% static "js/jquery.easing-1.3.min.js" %}></script>
+<script type="text/javascript" src={% static "js/jquery.dcjqaccordion.min.js" %}></script>
+<script type="text/javascript" src={% static "js/owl.carousel.min.js" %}></script>
+<script type="text/javascript" src={% static "js/custom.js" %}></script>
+<script type="text/javascript" src={% static "js/bootstrap.js" %}></script>
+{% endblock %}

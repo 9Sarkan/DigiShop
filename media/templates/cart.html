@@ -1,0 +1,109 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %} {{ block.super }} سبد خرید {% endblock %}
+{% block body %}
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li><a href={% url 'login' %}><i class="fa fa-home"></i></a></li>
+            <li><a href={% url 'cart' %}>سبد خرید</a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-12">
+            <h1 class="title">سبد خرید</h1>
+            <div class="table-responsive">
+                <p style= "color : red;"> *برای اعمال تخفیف لطفا تعداد را تغییر بدهید</p>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td class="text-center">تصویر</td>
+                        <td class="text-left">نام محصول</td>
+                        <td class="text-left">سازنده</td>
+                        <td class="text-left">تعداد</td>
+                        <td class="text-left">رنگ</td>
+                        <td class="text-left">سایز</td>
+                        <td class="text-right">قیمت واحد</td>
+                        <td class="text-right">تخفیف</td>
+                        <td class="text-right">کل</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in carts %}
+                        <tr>
+                                <td class="text-center">
+                                    <a href={% url 'KalaDetailView' i.product.slug %}>
+                                    <img src={{ i.product.pic0.url }} alt={{i.product.name}} title={{i.product.name}} class="img-thumbnail" style="width: 50px; height: 50px;" />
+                                    </a>
+                                </td>
+                                <td class="text-left"><a href={% url 'KalaDetailView' i.product.slug %}>{{i.product.name}}</a><br />
+                                <td class="text-left">{{i.product.manu}}</td>
+                                <td class="text-left">
+                                    <div class="input-group btn-block quantity">
+                                        <form method = "POST">
+                                        {% csrf_token %}
+                                            <input type='hidden'  name='product_slug' value="{{ i.product.slug }}" >
+                                            <input type="number" name="quantity" min='1' value = {{ i.count }} max = {{ i.saler.instock }} class="form-control" id="count" onchange="refresh()" />
+                                                <script type="text/javascript">
+                                                    function refresh()
+                                                    {
+                                                        var count = document.getElementById('count').value;
+                                                        var single = "{{ i.saler.price }}";
+                                                        var off = "{{ i.saler.off }}";
+                                                        var result = (count * single) * (1 - off / 100);
+                                                        document.getElementById('total').innerHTML = result;
+                                                    }
+                                                </script>
+                                            <span class="input-group-btn">
+                                                <button type="submit" name="update" data-toggle="tooltip" title="بروزرسانی" class="btn btn-primary"><i class="fa fa-refresh"></i></button>
+                                                <button type="submit" name="delete" data-toggle="tooltip" title="حذف" class="btn btn-danger" onClick=""><i class="fa fa-times-circle"></i></button>
+                                            </span>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td class="text-right">{{ i.color.name }}</p></td>
+                                <td class="text-right">{{ i.size.sizeno }}</p></td>
+                                <td class="text-right"><p id="single">{{ i.saler.price }}</p></td>
+                                <td class="text-right"><p id="off">{{ i.saler.off }}</p></td>
+                                <td class="text-right"><p id ="total">{{ i.totalPrice }}</p></td>
+                        </tr>       
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> 
+            
+            <p>در صورتی که کد تخفیف در اختیار دارید میتوانید از آن در اینجا استفاده کنید.</p>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"><i class="fa fa-ticket"></i> استفاده از کوپن تخفیف</h4>
+                        </div>
+                        <div class="panel-body">
+                            <label for="input-coupon" class="col-sm-3 control-label">کد کوپن خود را وارد کنید</label>
+                            <div class="input-group">
+                            <form method = 'POST'>
+                            {% csrf_token %}
+                                <input type="text" class="form-control" id="input-coupon" placeholder="کد تخفیف خود را در اینجا وارد کنید" value="" name="couponCode">
+                                <span class="input-group-btn">
+                                <input type="submit" name='applyCoupon' class="btn btn-success" id="button-coupon" value="اعمال تغییرات و تسویه حساب">
+                                </span>
+                            </form>
+                            </div>
+                        </div>
+                        <p style="color: red; padding : 10px;">{% if error %} * {{error}} {% endif %}</p>
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="buttons">
+                <div class="pull-left"><a href={% url 'index' %} class="btn btn-default">ادامه خرید</a></div>
+                <div class="pull-right"><a href={% url 'checkout' %} class="btn btn-primary">تسویه حساب بدون تغییرات</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

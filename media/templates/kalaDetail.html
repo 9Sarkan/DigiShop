@@ -1,0 +1,321 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %}{{ block.super }} {{ kala.name }} {% endblock %}
+{% block style %}
+
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap-rtl.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/font-awesome/css/font-awesome.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.carousel.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.transitions.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "js/swipebox/src/css/swipebox.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-skin2.css" %} />
+
+{% endblock %}
+{% block body %}
+<!-- Breadcrumb Start-->
+<div id="container">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href={% url 'index' %} itemprop="url"><span itemprop="title"><i class="fa fa-home"></i></span></a></li>
+        <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href={% url 'CategoryListView' kala.cat.slug %} itemprop="url"><span itemprop="title">{{ kala.cat }}</span></a></li>
+        <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href='#' itemprop="url"><span itemprop="title">{{ kala.name }}</span></a></li>
+      </ul>
+      <!-- Breadcrumb End-->
+      <div class="row">
+       <!--Middle Part Start-->
+  <div id="content" class="col-sm-9">
+    <div itemscope itemtype="http://schema.org/محصولات">
+      <h1 class="title" itemprop="name">{{ kala.name }}</h1>
+      <div class="row product-info">
+        <div class="col-sm-6">
+          <!-- gallery Start -->
+          <div class="image">
+            <img class="img-responsive" itemprop="image" src={{ kala.pic0.url }} title={{ kala.name }} alt={{ kala.name }} id="zoom_01" /> 
+          </div>
+          <div class="center-block text-center"><span class="zoom-gallery"><i class="fa fa-search"></i> برای مشاهده گالری روی تصویر کلیک کنید</span></div>
+          <div class="image-additional" id="gallery_01">
+            <a class="thumbnail" data-zoom-image={{ kala.pic0.url }} data-image={{ kala.pic0.url }} title={{ kala.name }}><img src={{ kala.pic0.url }} title={{ kala.name }} alt={{ kala.name }} /></a>
+            {% if kala.pic1.url != "/media/static/no-image.jpg" %}<a class="thumbnail" data-image={{ kala.pic1.url }} title={{ kala.name }}><img src={{ kala.pic1.url }} title={{ kala.name }} alt={{ kala.name }} /></a>{% endif %}
+            {% if kala.pic2.url != "/media/static/no-image.jpg" %}<a class="thumbnail" data-image={{ kala.pic2.url }} title={{ kala.name }}><img src={{ kala.pic2.url }} title={{ kala.name }} alt={{ kala.name }} /></a>{% endif %}
+            {% if kala.pic3.url != "/media/static/no-image.jpg" %}<a class="thumbnail" data-image={{ kala.pic3.url }} title={{ kala.name }}><img src={{ kala.pic3.url }} title={{ kala.name }} alt={{ kala.name }} /></a>{% endif %}
+          </div>
+          <!-- Gallary End -->
+        </div>
+        <div class="col-sm-6">
+          <ul class="list-unstyled description">
+            <li><b>برند :</b> <a href="#"><span itemprop="brand">{{ kala.manu }}</span></a></li>
+            <li><b>کد محصول :</b> <span itemprop="mpn">محصول {{ kala.id }}</span></li>
+            <li><b>وضعیت موجودی :</b> {% if inst %}<span class="instock">موجود</span>{% else %}<span class="nostock">ناموجود</span>{% endif %}</li>
+          </ul>
+          <ul class="price-box">
+            <li class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            {% if inst %}
+              {% if finst.off != 0 %}
+                <span class="price-old">{{ finst.price }} تومان</span>
+                  <span itemprop="price">{{ finst.NewPrice }} تومان<span itemprop="availability" content="موجود"></span>
+                </span>
+              {% else %}
+               <span itemprop="price">{{ finst.price }} تومان<span itemprop="availability" content="موجود"></span>
+              {% endif %}
+            {% endif %}
+            </li>
+            <li></li>
+          </ul>
+          <div id="product">
+            <form method = 'POST'>
+            {% csrf_token %}
+            <h3 class="subtitle">انتخاب های در دسترس</h3>
+            <div class="form-group required">
+              <label class="control-label">رنگ</label>
+              <select class="form-control" id="input-option200" name="Color">
+                {% for i in kala.color.all %}
+                  <option value ={{ i.id }}>{{ i.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group required">
+              <label class="control-label">سایز</label>
+              <select class="form-control" id="input-option200" name="Size">
+                {% for i in kala.size.all %}
+                  <option value ={{ i.id }}>{{ i.sizeno }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group required">
+              <label class="control-label">انتخاب فروشنده</label>
+              <select class="form-control" id="input-option200" name="Saller">
+                {% for i in inst %}
+                  <option value ={{ i.id }}>{{ i.saler }} --- {{ i.price }} -- تخفیف :  {{ i.off }}%</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="cart">
+              <div>
+                {% if is_authenticated %}
+                  {% if inst %}
+                    <button type="submit" id="button-cart" class="btn btn-primary btn-lg" name='addCart'>افزودن به سبد</button>
+                  {% else %}
+                    <button type="submit" class="btn btn-danger btn-lg" disabled>ناموجود</button>
+                  {% endif %}
+                {% else %}
+                  <a href={% url 'login' %}> <button type="button" id="Login" class="btn btn-primary btn-lg">ورود</button></a>
+                {% endif %}
+              </div>
+              {% comment %} <div>
+                <button type="button" class="wishlist" onClick=""><i class="fa fa-heart"></i> افزودن به علاقه مندی ها</button>
+              </div> {% endcomment %}
+            </div>
+          </div>
+          </div>
+          <hr>
+          <!-- AddThis Button BEGIN -->
+          <div class="addthis_toolbox addthis_default_style"> <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a> <a class="addthis_button_tweet"></a> <a class="addthis_button_google_plusone" g:plusone:size="medium"></a> <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal" pi:pinit:url="http://www.addthis.com/features/pinterest" pi:pinit:media="http://www.addthis.com/cms-content/images/features/pinterest-lg.png"></a> <a class="addthis_counter addthis_pill_style"></a> </div>
+          <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-514863386b357649"></script>
+          <!-- AddThis Button END -->
+          </form>
+        </div>
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab-description" data-toggle="tab">توضیحات</a></li>
+          <li><a href="#tab-specification" data-toggle="tab">مشخصات </a></li>
+          <li><a href="#tab-review" data-toggle="tab">نظرات</a></li>
+        </ul>
+        <div class="tab-content">
+          <div itemprop="description" id="tab-description" class="tab-pane active">
+            <div>
+              {{ kala.desc|safe }}
+            </div>
+          </div>
+          <div id="tab-specification" class="tab-pane">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td colspan="2"><strong>مشخصات فیزیکی</strong></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>سازنده</td>
+                    <td>{{ kala.manu }}</td>
+                  </tr>
+                  <tr>
+                    <td>نام کالا</td>
+                    <td>{{ kala.name }}</td>
+                  </tr>
+                  <tr>
+                    <td>رنگ</td>
+                    <td>{% for g in kala.color.all %} {{ g.name }}, {% endfor %} </td>
+                  </tr>
+                  <tr>
+                    <td>سایز</td>
+                    <td>{% for g in kala.size.all %} {{ g.sizeno }}, {% endfor %}</td>
+                  </tr>
+                </tbody>
+                </table>
+                <table class="table table-bordered">
+                <thead>
+                <tr>
+                <td colspan="2"><strong>فروشندگان</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in inst %}
+                <tr>
+                  <td>{{ i.saler }}</td>
+                  <td>{{ i.NewPrice }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+          <div id="tab-review" class="tab-pane">
+            <form class="form-horizontal" method = 'POST'>
+              {% csrf_token %} 
+              <div id="review">
+                <div>
+                  {% for c in comments %}
+                  {% if c.status == "t" %}
+                  <table class="table table-striped table-bordered">
+                    <tbody>
+                      <tr>
+                        <td style="width: 50%;"><strong><span>{{ c.writer }}</span></strong></td>
+                        <td class="text-right"><span>{{ c.date }}</span></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><p>{{ c.body }}</p>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                <div class="text-right"></div>
+              </div>
+              {% if username != "" %}
+              <h2>یک بررسی بنویسید</h2>
+              <div class="form-group required">
+                <div class="col-sm-12">
+                  <label for="input-review" class="control-label">بررسی شما</label>
+                  <textarea class="form-control" id="input-review" rows="5" name="text"></textarea>
+                  <div class="help-block"><span class="text-danger">توجه :</span> HTML بازگردانی نخواهد شد!</div>
+                </div>
+              </div>
+              <div class="buttons">
+                <div class="pull-right">
+                  <button class="btn btn-primary" id="button-review" type="submit" name='addComment'>ادامه</button>
+                </div>
+              </div>
+              {% else %}
+              <h2> برای نوشتن بررسی لطفا <a href={% url 'login' %}>وارد</a> شوید </h2>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      <h3 class="subtitle">محصولات مرتبط</h3>
+      <div class="owl-carousel related_pro">
+      {% for ak in Allkala %}
+        {% if ak.id != kala.id %}
+        <div class="product-thumb">
+          <div class="image">
+            <a href={% url 'KalaDetailView' ak.slug %}>
+              <img src={{ ak.pic0.url }} alt={{ ak.name }} title={{ ak.name }} class="img-responsive" width=220 height=330/>
+            </a>
+          </div>
+          <div class="caption">
+            <h4><a href={% url 'KalaDetailView' ak.slug %}>{{ ak.name }}</a></h4>
+            {% for i in ak.kalainst.all %}
+            <p class="price">
+              {% if i.off != 0 %}
+                <span class="price-new">{{ i.NewPrice }} تومان</span>
+                <span class="price-old">{{ i.price }} تومان</span>
+                <span class="saving">{{ i.off }}%</span>
+              {% else %}
+                <span class="price-new">{{ i.price }} تومان</span>
+              {% endif%}
+            </p>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+<!-- Middle Part End -->
+<!-- Right Side Start -->
+<aside id="column-right" class="col-sm-3 hidden-xs">
+  <h3 class="subtitle">محصولات دیگر</h3>
+  <div class="side-item">
+    {% for ak in Allkala %}
+    {% if ak.size == kala.size %}
+    {% comment %} {% if ak.id != kala.id %} {% endcomment %}
+    <div class="product-thumb clearfix">
+      <div class="image"><a href={% url 'KalaDetailView' ak.slug %}><img src={{ ak.pic0.url }} alt={{ ak.name }} title={{ ak.name }} class="img-responsive" /></a></div>
+      <div class="caption">
+        <h4><a href={% url 'KalaDetailView' ak.slug %}>{{ ak.name }}</a></h4>
+        {% for i in ak.kalainst.all %}
+          <p class="price">
+            {% if i.off != 0 %}
+            <span class="price-new">{{ i.NewPrice }} تومان</span>
+            <span class="price-old">{{ i.price }} تومان</span>
+            <span class="saving">{{ i.off }}%</span>
+            {% else %}
+            <span class="price-new">{{ i.price }} تومان</span>
+            {% endif %}
+          </p>
+        {% endfor %}
+      </div>
+    </div>
+    {% comment %} {% endif %} {% endcomment %}
+    {% endif %}
+    {% endfor %}
+  </div>
+  <div class="list-group">
+    <h3 class="subtitle">درباره فروشگاه</h3>
+    <p>خریدی کاملا مطمئن و با کیفیت را در وب سابت دیجی شاپ تجربه کنید.</p>
+    <p> نخستین وب سایت فروش لوازم ورزشی در سرتاسر ایران با امکان تست و بازگشت محصولات خریدار شده، <br/> دیجی شاپ برای اطمینان خاطر شما از کیفیت محصولات امکان بازگشت محصول را در اختیار شما قرار داده است. </p>
+  </div>
+</aside>
+<!-- Right Side End -->
+
+</div>
+</div>
+</div>
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript" src={% static "js/jquery-2.1.1.min.js" %}></script>
+<script type="text/javascript" src={% static "js/bootstrap/js/bootstrap.min.js" %}></script>
+<script type="text/javascript" src={% static "js/jquery.easing-1.3.min.js" %}></script>
+<script type="text/javascript" src={% static "js/jquery.dcjqaccordion.min.js" %}></script>
+<script type="text/javascript" src={% static "js/owl.carousel.min.js" %}></script>
+<script type="text/javascript" src={% static "js/jquery.elevateZoom-3.0.8.min.js" %}></script>
+<script type="text/javascript" src={% static "js/swipebox/lib/ios-orientationchange-fix.js" %}></script>
+<script type="text/javascript" src={% static "js/swipebox/src/js/jquery.swipebox.min.js" %}></script>
+<script type="text/javascript" src={% static "js/custom.js" %}></script>
+<script type="text/javascript">
+// Elevate Zoom for Product Page image
+$("#zoom_01").elevateZoom({
+	gallery:'gallery_01',
+	cursor: 'pointer',
+	galleryActiveClass: 'active',
+	imageCrossfade: true,
+	zoomWindowFadeIn: 500,
+	zoomWindowFadeOut: 500,
+	zoomWindowPosition : 11,
+	lensFadeIn: 500,
+	lensFadeOut: 500,
+	loadingIcon: 'image/progress.gif'
+	}); 
+//////pass the images to swipebox
+$("#zoom_01").bind("click", function(e) {
+  var ez =   $('#zoom_01').data('elevateZoom');
+	$.swipebox(ez.getGalleryList());
+  return false;
+});
+</script>
+{% endblock %}

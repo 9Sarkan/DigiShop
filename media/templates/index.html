@@ -1,0 +1,128 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %}{{ block.super }} صفحه اصلی {% endblock %}
+{% block style%}
+
+
+{% endblock %}
+{% block body %}
+<div id="container">
+<div class="container">
+    <div class="row">
+        <!-- slider show start -->
+        <div class="slideshow single-slider owl-carousel">
+            <div class="item"> <a href={% url 'CategoryListView' 'for-men' %}><img class="img-responsive" src={% static "image/slider/banner-1.jpg" %} alt="محصولات ویژه بانوان" /></a> </div>
+            <div class="item"> <a href={% url 'CategoryListView' 'for-woman' %}><img class="img-responsive" src={% static "image/slider/banner-2.jpg" %} alt="محصولات ویژه آقایان" /></a> </div>
+            <div class="item"> <a href={% url 'CategoryListView' 'special-for-sports' %}><img class="img-responsive" src={% static "image/slider/Special-Sports.jpg" %} alt="لوازم ورزشی" /></a> </div>
+        </div>
+        <!-- slider show end -->
+
+        <!-- Banner Start -->
+        <div class="marketshop-banner">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><a href={% url 'CategoryListView' 'with-ball' %}><img src={% static "image/banner/ball-sports.jpeg" %} alt="ورزش های دارای توپ" title="ورزش های دارای توپ" /></a></div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><a href={% url 'CategoryListView' 'sport-team-clothes' %}><img src={% static "image/banner/special-for-sports.jpg" %} alt="تیک تیم های ورزشی" title="تیک تیم های ورزشی" /></a></div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><a href={% url 'CategoryListView' 'shoes-m' %}><img src={% static "image/banner/men-sport-shoes.jpg" %} alt="کفش مردانه" title="کفش مردانه" width=300px height=300/></a></div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><a href={% url 'CategoryListView' 'shoes-f' %}><img src={% static "image/banner/woman-sport-shoes.jpg" %} alt="کفش بانوان" title="کفش بانوان"  width=300px height=300/></a></div>
+            </div>
+        </div>
+        <!-- Banner End -->
+        <!-- Product Tab Start -->
+        <div id="product-tab" class="product-tab">
+            <ul id="tabs" class="tabs">
+                <li><a href="#tab-latest">دیجی شاپ</a></li>
+                <li><a href="#tab-featured">شگفت انگیز</a></li>
+                <li><a href="#tab-bestseller">پرفروش ها</a></li>
+            </ul>
+            <div id="tab-latest" class="tab_content">
+                <div class="owl-carousel product_carousel_tab">
+                    {% for k in kala %}
+                    <div class="product-thumb clearfix">
+                        <div class="image"><a href={% url 'KalaDetailView' k.slug %}><img src={{ k.pic0.url }} alt="{{ k.name }}" title="{{ k.name }}" class="img-responsive" /></a></div>
+                        <div class="caption">
+                            <h4><a href={% url 'KalaDetailView' k.slug %}>{{ k.name }}</a></h4>
+                            {% for i in k.kalainst.all %}
+                            <p class="price"><span class="price-new">{{ i.NewPrice }} تومان</span>{% if i.off == 0 %}{% else %}<span class="price-old">{{ i.price }} تومان</span><span class="saving">{{ i.off }}%</span>{% endif %}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="tab-featured" class="tab_content">
+                <div class="owl-carousel product_carousel_tab">
+                    {% for k in OffKala %}
+                    <div class="product-thumb clearfix">
+                        <div class="image"><a href={% url 'KalaDetailView' k.kala.slug %}><img src={{ k.kala.pic0.url }} alt="{{ k.kala.name }}" title="{{ k.kala.name }}" class="img-responsive" /></a></div>
+                        <div class="caption">
+                            <h4><a href={% url 'KalaDetailView' k.kala.slug %}>{{ k.kala.name }}</a></h4>
+                            <p class="price"><span class="price-new">{{ k.NewPrice }} تومان</span>{% if k.off == 0 %}{% else %}<span class="price-old">{{ k.price }} تومان</span><span class="saving">{{ k.off }}%</span>{% endif %}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="tab-bestseller" class="tab_content">
+                <div class="owl-carousel product_carousel_tab">
+                    {% for k in mostSalled %}
+                    <div class="product-thumb clearfix">
+                        <div class="image"><a href={% url 'KalaDetailView' k.product.slug %}><img src={{ k.product.pic0.url }} alt="{{ k.product.name }}" title="{{ k.product.name }}" class="img-responsive" /></a></div>
+                        <div class="caption">
+                            <h4><a href={% url 'KalaDetailView' k.product.slug %}>{{ k.product.name }}</a></h4>
+                            <p class="price"><span class="price-new">{{ k.saler.NewPrice }} تومان</span>{% if k.saler.off == 0 %}{% else %}<span class="price-old">{{ k.saler.price }} تومان</span><span class="saving">{{ k.saler.off }}%</span>{% endif %}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- Product Tab End -->
+
+        <!-- Logos Tab Start -->
+        <div id="carousel" class="owl-carousel nxt">
+            {% for m in Manufactors %}
+            <div class="item text-center">
+                <a href="#"><img src={{ m.logo.url }} alt={{ m.name }} class="img-responsive" /></a>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Logos Tab End -->
+
+    </div>
+</div>
+
+<!-- Feature Box Start -->
+<div class="container">
+    <div class="custom-feature-box row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="feature-box fbox_1">
+                <div class="title">ارسال رایگان</div>
+                <p>برای خرید های بیش از 100 هزار تومان</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="feature-box fbox_2">
+                <div class="title">پس فرستادن رایگان</div>
+                <p>بازگشت کالا تا 24 ساعت پس از خرید</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="feature-box fbox_3">
+                <div class="title">کارت هدیه</div>
+                <p>بهترین هدیه برای عزیزان شما</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="feature-box fbox_4">
+                <div class="title">امتیازات خرید</div>
+                <p>از هر خرید امتیاز کسب کرده و از آن بهره بگیرید</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Feature Box End -->
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src={% static "js/bootstrap.js" %}></script>
+{% endblock %}

@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link href={% static "image/favicon.png" %} rel="icon" />
+<title>{% block title %} - دیجی شاپ{% endblock %}</title>
+<meta name="description" content="Responsive and clean html design, and jinja2 edition By Sarkan">
+<!-- CSS Part Start-->
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap-rtl.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/font-awesome/css/font-awesome.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.carousel.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.transitions.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-skin2.css" %} />
+{% block style %} 
+
+
+{% endblock %}
+<!-- CSS Part End-->
+</head>
+<body {% block inbody %} {% endblock %}>
+<div class="wrapper-wide">
+  <div id="header">
+    <!-- Top Bar Start-->
+    <nav id="top" class="htop">
+      <div class="container">
+        <div class="row"> <span class="drop-icon visible-sm visible-xs"><i class="fa fa-align-justify"></i></span>
+          <div class="pull-left flip left-top">
+            <div class="links">
+              <ul>
+                <li class="mobile"><i class="fa fa-phone"></i>+98 914 724 9252</li>
+                <li class="email"><a href="mailto:sarkan.mohammady@gmail.com"><i class="fa fa-envelope"></i>sarkan.mohammady@gmail.com</a></li>
+              </ul>
+            </div>
+          </div>
+          <div id="top-links" class="nav pull-right flip">
+            <ul>
+              {% if  is_authenticated %}
+                <li><a href={% url 'logout' %}>خروج</a></li>
+                <li><a href={% url 'profile' %}>ویرایش اطلاعات کاربری</a></li>
+              {% else %}
+                <li><a href={% url 'login' %}>ورود</a></li>
+                <li><a href={% url 'register' %}>ثبت نام</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- Top Bar End-->
+    <!-- Header Start-->
+    <header class="header-row">
+      <div class="container">
+        <div class="table-container">
+          <!-- Logo Start -->
+          <div class="col-table-cell col-lg-6 col-md-6 col-sm-12 col-xs-12 inner">
+            <div id="logo"><a href="index.html"><img class="img-responsive" src={% static "image/Mylogo.png" %} title="MarketShop" alt="MarketShop" /></a></div>
+          </div>
+          <!-- Logo End -->
+			
+          <!-- جستجو Start-->
+          <div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+            <div id="search" class="input-group">
+              <form method='GET' id="searchform" action="{% url 'search' %}" accept-charset = 'utf-8'>
+              {% csrf_token %}
+                <input id="filter_name" type="text" name="search" value="" placeholder="جستجو" class="form-control input-lg" />
+                <button type="submit" class="button-search"><i class="fa fa-search"></i></button>
+              </form>
+            </div>
+          </div>
+          <!-- جستجو End-->
+        </div>
+      </div>
+    </header>
+    <!-- Header End-->
+    
+    <!-- Navbar Start-->
+      <nav id="menu" class="navbar">
+        <div class="navbar-header"> <span class="visible-xs visible-sm"> منو <b></b></span></div>
+        <div class="container">
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav">
+            <li><a class="home_link" title="خانه" href={% url "index" %}>خانه</a></li>
+            <li class="dropdown"><a href={% url 'CategoryListView' "for-man" %}>آقایان</a>
+              <div class="dropdown-menu">
+              <ul>
+				           <li><a href={% url 'CategoryListView' "clothes-m" %}>لباس</a></li>
+                   <li><a href={% url 'CategoryListView' "bag-m" %}>کیف</a></li>
+                   <li><a href={% url 'CategoryListView' "shoes-m" %}>کفش</a> </li>
+                   <li><a href={% url 'CategoryListView' "watch-m" %}>ساعت</a></li>
+                   <li><a href={% url 'CategoryListView' "parfum-m" %}>ادکلن، عطر و اسپری</a></li>
+              </ul>
+              </div>
+            </li>
+            <li class="dropdown"><a href={% url 'CategoryListView' "for-women" %}>بانوان</a>
+              <div class="dropdown-menu">
+              <ul>
+				           <li><a href={% url 'CategoryListView' "clothes-f" %}>لباس</a></li>
+                   <li><a href={% url 'CategoryListView' "bag-f" %}>کیف</a></li>
+                   <li><a href={% url 'CategoryListView' "shoes-f" %} >کفش</a> </li>
+                   <li><a href={% url 'CategoryListView' "watch-f" %}>ساعت</a></li>
+                   <li><a href={% url 'CategoryListView' "parfum-f" %}>ادکلن، عطر و اسپری</a></li>
+              </ul>
+              </div>
+            </li>
+            <li class="dropdown"><a href={% url 'CategoryListView' "special-for-sports" %}>لوازم ورزشی</a>
+              <div class="dropdown-menu">
+              <ul>
+				           <li><a href={% url 'CategoryListView' "with-ball" %}>ورزش های توپی</a></li>
+                   <li><a href={% url 'CategoryListView' "water-sports" %}>ورزش های آبی</a></li>
+                   <li><a href={% url 'CategoryListView' "bady-building" %}>ورزش های بدنسازی</a> </li>
+                   <li><a href={% url 'CategoryListView' "sport-team-clothes" %}>لباس تیم های ورزشی</a></li>
+                   <li><a href={% url 'CategoryListView' "bicycle-sports" %}>دوچرخه سواری</a></li>
+              </ul>
+              </div>
+            </li>
+
+            <li class="dropdown"><a href={% url 'brands' %}>برندها</a>
+              <div class="dropdown-menu">
+              <ul>
+		               <li><a href={% url 'BrandListView' 'nike' %}>Nike</a></li>
+                   <li><a href={% url 'BrandListView' 'adidas' %}>Adidas</a></li>
+                   <li><a href={% url 'BrandListView' 'puma' %}>Puma</a></li>
+                   <li><a href={% url 'BrandListView' 'reebok' %}>ReeBok</a></li>
+                   <li><a href={% url 'BrandListView' 'jordan' %}>Jordan</a></li>
+                   <li><a href={% url 'BrandListView' 'under-armour' %}>Under Armour</a></li>
+                   <li><a href={% url 'BrandListView' 'brooks' %}>Brooks</a></li>
+                   <li><a href={% url 'BrandListView' 'new-balance' %}>New Balance</a></li>
+                   <li><a href={% url 'BrandListView' 'polo' %}>Polo</a></li>
+                   <li><a href={% url 'BrandListView' 'asics' %}>Asics</a></li>				           
+              </ul>
+              </div>
+            </li>
+            {% if is_authenticated %}
+            <li class="custom-link-right"><a href={% url 'done' %}>پیگیری سفارشات</a></li>
+            <li class="custom-link-right"><a href={% url 'checkout' %}>تسویه حساب</a></li>
+            <li class="custom-link-right"><a href={% url 'cart' %}>سبد خرید</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        </div>
+      </nav>
+  </div>
+
+
+      <!-- Body Start -->
+     
+      {% block body %}
+
+
+
+      {% endblock %}
+     
+      <!-- Body End -->
+
+
+
+
+
+      <!--Footer Start-->
+      <footer id="footer">
+        <div class="fpart-first">
+          <div class="container">
+            <div class="row">
+              <div class="contact col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <h5>درباره دیجی شاپ</h5>
+                <p>فروشگاه دیجی شاپ بهترین گزینه ها و قیمت ها را برای شما دارا می باشد با یک خیال راحت و <br>
+                اطمینان کامل از دیجی شاپ خرید کنید و بهترین کیفیت را داشته باشید.</p>
+                <img alt="" src={% static "image/logo_small.png" %}>
+              </div>
+              <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <h5>اطلاعات</h5>
+                <ul>
+                  <li><a href={% url 'about' %}>درباره ما</a></li>
+                  <li><a href={% url 'private' %}>حریم خصوصی</a></li>
+                  <li><a href={% url 'rules' %}>شرایط و قوانین</a></li>
+                </ul>
+              </div>
+              <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <h5>امکانات جانبی</h5>
+                <ul>
+                  <li><a href={% url 'brands' %}>برند ها</a></li>
+                  <li><a href={% url "contact_us" %}>تماس با ما</a></li>
+                </ul>
+              </div>
+              <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <h5>شبکه های اجتماعی</h5>
+                <ul>
+                  <li><a href="https://telegram.me/sarkan_m" terget="_blank">تلگرام</a></li>
+                  <li><a href="https://www.instagram.com/_9sarkan/" terget="_blank">اینستاگرام</a></li>
+                  <li><a href="https://snapchat.com/sarkan_kurd" terget="_blank">اسنپ چت</a></li>
+                  <li><a href="https://gap.im/sarkan_m" terget="_blank">گپ</a></li>
+                </ul>
+              </div>
+              <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <h5>حساب من</h5>
+                <ul>
+                  <li><a href={% url 'profile' %}>حساب کاربری</a></li>
+                  <li><a href={% url 'done' %}>تاریخچه سفارشات</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fpart-second">
+          <div class="container">
+            <div class="bottom-row">
+              <div class="custom-text text-center">
+                <p>فروشگاه دیجی شاپ بهترین گزینه ها و قیمت ها را برای شما دارا می باشد با یک خیال راحت و <br>
+                  و اطمینان کامل از دیجی شاپ خرید کنید و بهترین کیفیت را داشته باشید.</p>
+                <p>کپی رایت 2018 - علی محمدی (دانشگاه شهید شمسی پور)</p>
+              </div>
+              <div class="payments_types">
+               <a href="#" target="_blank"> <img data-toggle="tooltip" src={% static "image/payment/payment_paypal.png" %} alt="paypal" title="PayPal" /></a>
+               <a href="#" target="_blank"> <img data-toggle="tooltip" src={% static "image/payment/payment_american.png" %} alt="american-express" title="American Express" /></a>
+               <a href="#" target="_blank"> <img data-toggle="tooltip" src={% static "image/payment/payment_2checkout.png" %} alt="2checkout" title="2checkout" /></a>
+               <a href="#" target="_blank"> <img data-toggle="tooltip" src={% static "image/payment/payment_maestro.png" %} alt="maestro" title="Maestro" /></a>
+               <a href="#" target="_blank"> <img data-toggle="tooltip" src={% static "image/payment/payment_discover.png" %} alt="discover" title="Discover" /></a>
+               <a href="#" target="_blank"> <img data-toggle="tooltip" src={% static "image/payment/payment_mastercard.png" %} alt="mastercard" title="MasterCard" /></a> 
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="back-top"><a data-toggle="tooltip" title="بازگشت به بالا" href="javascript:void(0)" class="backtotop"><i
+              class="fa fa-chevron-up"></i></a></div>
+      </footer>
+      <!--Footer End-->
+
+    <!-- JS Part Start -->
+    <script type="text/javascript" src={% static "js/jquery-2.1.1.min.js" %}></script>
+    <script type="text/javascript" src={% static "js/bootstrap/js/bootstrap.min.js" %}></script>
+    <script type="text/javascript" src={% static "js/jquery.easing-1.3.min.js" %}></script>
+    <script type="text/javascript" src={% static "js/jquery.dcjqaccordion.min.js" %}></script>
+    <script type="text/javascript" src={% static "js/owl.carousel.min.js" %}></script>
+    <script type="text/javascript" src={% static "js/custom.js" %}></script>
+    <script src={% static "js/uikit-icons.js" %}></script>
+    <script src={% static "js/uikit-icons.min.js" %}></script>
+    <script src={% static "js/uikit.js" %}></script>
+    <script src={% static "js/uikit.min.js" %}></script>
+    {% block script %}
+    {% endblock %}
+    <!-- JS Part End-->
+
+</body>
+
+</html>

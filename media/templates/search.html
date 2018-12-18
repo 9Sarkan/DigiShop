@@ -1,0 +1,140 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %}{{ block.super }} جستجو {% endblock %}
+{% block style %}
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "js/bootstrap/css/bootstrap-rtl.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/font-awesome/css/font-awesome.min.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.carousel.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/owl.transitions.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/responsive-rtl.css" %} />
+<link rel="stylesheet" type="text/css" href={% static "css/stylesheet-skin2.css" %} />
+{% endblock %}
+{% block body %}
+<div id="container">
+<div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+    <li><a href={% url 'index' %}><i class="fa fa-home"></i></a></li>
+    <li>جستجو</li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+    <!--Left Part Start -->
+    <aside id="column-left" class="col-sm-3 hidden-xs">
+        <h3 class="subtitle">شگفت انگیزها</h3>
+        <div class="side-item">
+            {% for j in OffKala %}
+            {% comment %} {% for i in j.kalainst.all %} {% endcomment %}
+            <div class="product-thumb clearfix">
+                <div class="image"><a href="product.html"><img src={{ j.kala.pic0.url }} alt={{ j.kala.name }} title={{ j.kala.name }} class="img-responsive" /></a></div>
+                <div class="caption">
+                    <h4><a href="product.html">{{ j.kala.name }}</a></h4>
+                    <p class="price"><span class="price-new">{{ j.NewPrice }}</span> <span class="price-old">{{ j.price }}</span> <span class="saving">-{{ j.off }}%</span></p>
+                </div>
+            </div>
+            {% comment %} {% endfor %} {% endcomment %}
+            {% endfor %}
+        </div>
+        <h3 class="subtitle">پرفروش ها</h3>
+        <div class="side-item">
+            {% for j in mostsalled %}
+            <div class="product-thumb clearfix">
+                <div class="image"><a href={% url 'KalaDetailView' j.product.slug %}><img src={{ j.product.pic0.url }} alt={{ j.product.name }} title={{ j.product.name }} class="img-responsive" /></a></div>
+                <div class="caption">
+                    <h4><a href={% url 'KalaDetailView' j.product.slug %}>{{ j.product.name }}</a></h4>
+                    <p class="price"><span class="price-new">{{ j.saler.NewPrice }}</span> <span class="price-old">{{ j.saler.price }}</span> <span class="saving">-{{ j.saler.off }}%</span></p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="banner owl-carousel">
+            <div class="item"> <a href="#"><img src={% static "image/banner/small-banner1-265x350.jpg" %}  alt="small banner" class="img-responsive" /></a> </div>
+            <div class="item"> <a href="#"><img src={% static "image/banner/small-banner-265x350.jpg" %} alt="small banner1" class="img-responsive" /></a> </div>
+        </div>
+    </aside>
+    <!-- Left Part End -->
+    <!-- Middle Part Start -->
+    <div id="content" class="col-sm-9">
+        <h1 class="title">{{ cate.cat.name }}</h1>
+        <div class="product-filter">
+            <div class="row">
+                <div class="col-md-4 col-sm-5">
+                    <div class="btn-group">
+                        <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="List"><i class="fa fa-th-list"></i></button>
+                        <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="Grid"><i class="fa fa-th"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row products-category">
+            <div class="product-layout product-list col-xs-12">
+            {% if kalas %}
+                {% for i in kalas %}
+                <div class="product-thumb">
+                    <div class="image"><a href={% url 'KalaDetailView' i.slug %}><img src={{ i.pic0.url }} alt={{ i.name }} title={{ i.name }} class="img-responsive" /></a>
+                    </div>
+                    <div>
+                        <div class="caption">
+                            <h4><a href={% url 'KalaDetailView' i.slug %}> {{ i.name }} </a></h4>
+                            <p class="description">{{ i.mindesc }}</p>
+                            {% for j in i.kalainst.all %}
+                            <p class="price"> {% if j.off != 0 %} <span class="price-new">{{ j.NewPrice }}</span> <span class="price-old">{{ j.price }}</span> <span class="saving">-{{ j.off }}%</span>{% else %} <span class="price-new">{{ j.price }}</span> {% endif %}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="button-group">
+                            <a href={% url 'KalaDetailView' i.slug %} ><button class="btn-primary" type="button"><span>خرید</span></button></a>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+                <center>
+                <h1>404</h1>
+                <p>کالای مورد نظر یافت نشد</p>
+                <a href={% url 'index' %}>بازگشت به صفحه اصلی</a>
+                <br/>
+                </center>
+            {% endif %}
+        </div>
+        {% if kalas %}
+        <div class="row">
+            <div class="col-sm-6 text-left">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                        <li><a href="{{ request.path }}?page=1">&lt;|</a></li>
+                    {% endif %}
+                    <li class="active"><span>{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}">&gt;</a></li>
+                        <li><a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">&gt;|</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-sm-6 text-right">
+            صفحه ی {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Middle Part End -->
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src={% static "js/jquery-2.1.1.min.js" %}></script>
+<script type="text/javascript" src={% static "js/bootstrap/js/bootstrap.min.js" %}></script>
+<script type="text/javascript" src={% static "js/jquery.easing-1.3.min.js" %}></script>
+<script type="text/javascript" src={% static "js/jquery.dcjqaccordion.min.js" %}></script>
+<script type="text/javascript" src={% static "js/owl.carousel.min.js" %}></script>
+<script type="text/javascript" src={% static "js/custom.js" %}></script>
+<script type="text/javascript" src={% static "js/bootstrap.js" %}></script>
+{% endblock %}

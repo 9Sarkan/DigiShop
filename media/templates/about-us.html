@@ -1,0 +1,29 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %} {{ block.super }} درباره ما {% endblock %}
+{% block body %}
+<div id="container">
+    <div class="container">
+      	<!-- Breadcrumb Start-->
+      	<ul class="breadcrumb">
+	        <li><a href={% url "index" %}><i class="fa fa-home"></i></a></li>
+	        <li><a href={% url "about" %}>درباره ما</a></li>
+      	</ul>
+      	<!-- Breadcrumb End-->
+      	<div class="row">
+       		<!--Middle Part Start-->
+       		<div id="content" class="col-sm-12">
+          		<h1 class="title">درباره ما</h1>
+          		<div class="row">
+            		<div class="col-sm-12">
+            			خریدی کاملا مطمئن و با کیفیت را در وب سابت دیجی شاپ تجربه کنید.
+<br/>
+نخستین وب سایت فروش لوازم ورزشی در سرتاسر ایران با امکان تست و بازگشت محصولات خریدار شده، <br/>
+دیجی شاپ برای اطمینان خاطر شما از کیفیت محصولات امکان بازگشت محصول را در اختیار شما قرار داده است.<br/>
+            		</div>
+          		</div>
+        	</div>
+      	</div>
+    </div>
+</div>
+{% endblock %}

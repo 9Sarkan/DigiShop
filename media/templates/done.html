@@ -1,0 +1,45 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %}{{ block.super }} عملیات انجام شد {% endblock %}
+{% block body %}
+<div id="container">
+    <div class="container">
+        <center>
+        <img src={% static 'image/done.png' %} alt = 'Job Done' title = 'Job Done' width= 500px; height = 200px;/>
+        <br/>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td class="text-right">کد پیگیری</td>
+                    <td class="text-left">وضعیت ارسال</td>
+                    <td class="text-left">تاریخ</td>
+                    <td class="text-left">مالیات</td>
+                    <td class="text-right">هزینه ارسال</td>
+                    <td class="text-right">کل</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in sall %}
+                <tr>
+                    <td class="text-right">{{ i.FollowUpCode }}</td>
+                    <td class="text-right">
+                    {% if i.sent == 'F' %}
+                        منتظر ارسال
+                    {% else %}
+                        تحویل پست داده شده است
+                    {% endif %}
+                    </td>
+                    <td class="text-right">{{i.date}}</td>
+                    <td class="text-right">{{i.tax}}</td>
+                    <td class="text-right">{{i.send_price}}</td>
+                    <td class="text-right">{{i.total}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br/>
+        <a href={% url 'index' %}><input type="button" value = "ادامه خرید" class="btn btn-success" /></a>
+        </center>
+    </div>
+</div>
+{% endblock %}

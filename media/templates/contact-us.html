@@ -1,0 +1,83 @@
+{% extends 'shared/main.html' %}
+{% load static %}
+{% block title %} {{ block.super }} تماس با ما{% endblock %}
+{% block body %}
+  <div id="container">
+    <div class="container">
+    	{% if sent %}<center><h2 style="color : green;"><b>دیدگاه شما با موفقیت ثبت شد</b></h3></center>{% endif %}
+      <!-- Breadcrumb Start-->
+      <ul class="breadcrumb">
+        <li><a href={% url "index" %}><i class="fa fa-home"></i></a></li>
+        <li><a href={% url "contact_us" %}>تماس با ما</a></li>
+      </ul>
+      <!-- Breadcrumb End-->
+      <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-9">
+          <h1 class="title">تماس با ما</h1>
+          <h3 class="subtitle">محل ما</h3>
+          <div class="row">
+          	<div class="col-sm-3"><strong>فروشگاه دیجی شاپ</strong><br />
+              <address>
+              میدان امام حسین،<br />
+              خیابان دماوند،<br />
+              دانشگاه شهید شهمسی پور،<br />
+              تهران</address>
+            </div>
+            <div class="col-sm-3">
+            <strong>شماره تلفن</strong><br>
+              +98 914 724 9252<br />
+            <strong>فکس</strong><br>
+            +98 914 724 9252 </div>
+            <div class="col-sm-3"> <strong>ساعات کار</strong><br />
+              خدمات مشتریان 24x7<br />
+              <br />
+              <strong>دیدگاه ها</strong><br />
+              در اینجا توضیحات دلخواه خود را قرار دهید. </div>
+          </div>
+          <form class="form-horizontal" method = 'POST'>
+          	{% csrf_token %}
+            <fieldset>
+              <h3 class="subtitle">با ما ارتباط برقرار کنید</h3>
+              <div class="form-group required">
+                <label class="col-md-2 col-sm-3 control-label" for="input-name">نام شما</label>
+                <div class="col-md-10 col-sm-9">
+                  <input type="text" name="name" value="" id="input-name" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-md-2 col-sm-3 control-label" for="input-email">آدرس ایمیل</label>
+                <div class="col-md-10 col-sm-9">
+                  <input type="text" name="email" value="" id="input-email" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-md-2 col-sm-3 control-label" for="input-enquiry">پرسش</label>
+                <div class="col-md-10 col-sm-9">
+                  <textarea name="description" rows="10" id="input-enquiry" class="form-control"></textarea>
+                </div>
+              </div>
+            </fieldset>
+            <div class="buttons">
+              <div class="pull-right">
+                <input class="btn btn-primary" type="submit" value="ارسال" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <aside id="column-right" class="col-sm-3 hidden-xs">
+          <div class="list-group">
+            <h2 class="subtitle">محتوای سفارشی</h2>
+    <p>خریدی کاملا مطمئن و با کیفیت را در وب سابت دیجی شاپ تجربه کنید.</p>
+    <p> نخستین وب سایت فروش لوازم ورزشی در سرتاسر ایران با امکان تست و بازگشت محصولات خریدار شده، <br/> دیجی شاپ برای اطمینان خاطر شما از کیفیت محصولات امکان بازگشت محصول را در اختیار شما قرار داده است. </p>
+          </div>
+          <div class="banner owl-carousel">
+            <div class="item"> <a href="#"><img src={% static "image/banner/small-banner1-265x350.jpg" %} alt="small banner" class="img-responsive" /></a> </div>
+            <div class="item"> <a href="#"><img src={% static "image/banner/small-banner-265x350.jpg" %} alt="small banner1" class="img-responsive" /></a> </div>
+          </div>
+        </aside>
+        <!--Middle Part End -->
+      </div>
+    </div>
+  </div>
+{% endblock %}
